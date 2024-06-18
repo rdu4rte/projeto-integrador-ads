@@ -1,0 +1,28 @@
+version: '3.5'
+
+services:
+  app:
+    hostname: 'app-${PROJECT_NAME}'
+    container_name: 'app-${PROJECT_NAME}'
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    depends_on:
+      - mongodb
+      - clickhouse
+    env_file:
+      - .env.dev
+
+  clickhouse:
+    hostname: 'clickhouse-${PROJECT_NAME}'
+    container_name: 'clickhouse-${PROJECT_NAME}'
+    image: 'yandex/clickhouse-server:latest'
+    env_file:
+      - .env.dev
+
+  mongodb:
+    hostname: 'mongodb-${PROJECT_NAME}'
+    container_name: 'mongodb-${PROJECT_NAME}'
+    image: 'mongo:4.2.3'
+    env_file:
+      - .env.dev

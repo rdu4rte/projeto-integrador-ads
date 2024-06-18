@@ -1,0 +1,61 @@
+version: "3"
+
+dotenv: [".env.dev"]
+
+vars:
+  LOCAL_SERVICES: "app mongodb clickhouse"
+  COMPOSE_FILE: "COMPOSE_FILE=docker-compose.yml"
+  BUILD_CMD: "docker compose build --no-cache"
+  RUN_CMD: "docker compose up -d {{.LOCAL_SERVICES}}"
+  STOP_CMD: "docker compose down -v"
+  ZSH_CMD: "docker exec -it app-$PROJECT_NAME zsh"
+  LOGS_CMD: "docker compose logs -f --tail=500"
+  LOGS_APP_CMD: "docker compose logs -f --tail=500 app"
+  TEST_WATCH_LOCAL: "NODE_ENV=test yarn clear-jest-cache && yarn test:watch"
+
+tasks:
+  default:
+    cmds:
+      - task: run
+
+  run:
+    desc: Execute local project
+    cmds:
+      - task: build
+      - "{{.RUN_CMD}}"
+
+  build:
+    desc: Build containers
+    cmds:
+      - "{{.BUILD_CMD}}"
+
+  stop:
+    desc: Stop containers
+    cmds:
+      - "{{.STOP_CMD}}"
+
+  restart:
+    desc: Recreate containers
+    cmds:
+      - task: stop
+      - task: run
+
+  test:
+    desc: Execute tests locally
+    cmds:
+      - "{{.TEST_WATCH_LOCAL}}"
+
+  app:
+    desc: Enter app zsh
+    cmds:
+      - "{{.ZSH_CMD}}"
+
+  logs:
+    desc: Docker logs
+    cmds:
+      - "{{.LOGS_CMD}}"
+
+  logs:app:
+    desc: Docker app logs
+    cmds:
+      - "{{.LOGS_APP_CMD}}"

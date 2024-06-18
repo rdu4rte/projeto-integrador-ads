@@ -1,0 +1,14 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @test on FIELD_DEFINITION
+
+type Query {
+  ping: TestResponse!
+}
+
+type TestResponse {
+  details: String!
+  success: Boolean!
+}
