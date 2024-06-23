@@ -9,14 +9,6 @@ services:
     networks:
       - local_dev_network
 
-  clickhouse:
-    ports:
-      - '8133:8123'
-    volumes:
-      - 'db:/data/clickhouse'
-    networks:
-      - local_dev_network
-
   mongodb:
     ports:
       - '27027:27017'

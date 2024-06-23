@@ -3,7 +3,7 @@ version: "3"
 dotenv: [".env.dev"]
 
 vars:
-  LOCAL_SERVICES: "app mongodb clickhouse"
+  LOCAL_SERVICES: "app mongodb"
   COMPOSE_FILE: "COMPOSE_FILE=docker-compose.yml"
   BUILD_CMD: "docker compose build --no-cache"
   RUN_CMD: "docker compose up -d {{.LOCAL_SERVICES}}"
