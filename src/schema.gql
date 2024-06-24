@@ -4,6 +4,22 @@
 
 directive @test on FIELD_DEFINITION
 
+type DistributorContact {
+  address: String!
+  email: String!
+  phone: String!
+}
+
+"""Mongo Object Id scalar type"""
+scalar ObjectId
+
+type ProductSlot {
+  _id: ObjectId!
+  name: String!
+  quantity: Int
+  unitValue: Float!
+}
+
 type Query {
   ping: TestResponse!
 }

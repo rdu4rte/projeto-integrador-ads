@@ -12,7 +12,7 @@
     "start": "NODE_ENV=produtction nest start",
     "dev": "yarn seed && yarn start:dev",
     "start:dev": "NODE_ENV=development nest start --watch",
-    "seed": "ts-node ./seed/run.ts",
+    "seed": "NODE_ENV=development ts-node ./seed/run.ts",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
