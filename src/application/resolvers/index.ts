@@ -1,1 +1,1 @@
-export * from './test.resolver'
+export * from './product.resolver'

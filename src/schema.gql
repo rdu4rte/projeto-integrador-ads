@@ -2,7 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-directive @test on FIELD_DEFINITION
+directive @dbConnection on FIELD_DEFINITION
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type DistributorContact {
   address: String!
@@ -13,6 +18,25 @@ type DistributorContact {
 """Mongo Object Id scalar type"""
 scalar ObjectId
 
+input PaginationParams {
+  page: Int
+  pageSize: Int
+  search: String
+  sort: [String!]
+  sortDirection: SortDirection
+}
+
+type Product {
+  _id: ObjectId!
+  active: Boolean!
+  category: ProductsCategory!
+  createdAt: DateTime!
+  description: String!
+  name: String!
+  unitValue: Float!
+  updatedAt: DateTime!
+}
+
 type ProductSlot {
   _id: ObjectId!
   name: String!
@@ -20,11 +44,34 @@ type ProductSlot {
   unitValue: Float!
 }
 
-type Query {
-  ping: TestResponse!
+"""Products category type definition"""
+enum ProductsCategory {
+  apparel
+  artsAndCrafts
+  babyProducts
+  beautyAndPersonalCare
+  books
+  eletronicts
+  gardenAndOutdoor
+  healthAndWellness
+  homeAndKitchen
+  musicAndEntertainment
+  officeSupplies
+  petSupplies
+  toysAndGames
 }
 
-type TestResponse {
-  details: String!
-  success: Boolean!
+type ProductsDataResponse {
+  count: Int!
+  data: [Product!]!
+}
+
+type Query {
+  products(input: PaginationParams!): ProductsDataResponse!
+}
+
+"""Sort direction type definition"""
+enum SortDirection {
+  ASC
+  DESC
 }

@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 
-import { Order, OrderStatus } from '../../src/application/dtos/orders.dto'
+import { Order, OrderStatus } from '../../src/application/dtos/order.dto'
 import { products } from './products.data'
 
 export const orders: Order[] = [

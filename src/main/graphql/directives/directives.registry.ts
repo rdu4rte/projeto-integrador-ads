@@ -1,11 +1,11 @@
 import { DirectiveLocation, GraphQLDirective, GraphQLSchema } from 'graphql'
 
-import { testDirective } from './test.directive'
+import { dbConnectionDirective } from './db-connection.directive'
 
 /**
  * @description Directives config, the order matters
  */
-const schemaDirectives = [{ directive: testDirective, name: 'test' }]
+const schemaDirectives = [{ directive: dbConnectionDirective, name: 'dbConnection' }]
 
 /**
  * @description Directives registry schema
@@ -25,7 +25,7 @@ export const transformSchema = (schema: GraphQLSchema): GraphQLSchema => {
  */
 export const directives: GraphQLDirective[] = [
   new GraphQLDirective({
-    name: 'test',
+    name: 'dbConnection',
     locations: [DirectiveLocation.FIELD_DEFINITION],
   }),
 ]

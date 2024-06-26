@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common'
 
-import { TestResolver } from '@/application/resolvers'
+import { ProductResolver } from '@/application/resolvers'
+
+import { UsecasesProxyModule } from './usecases-proxy.module'
 
 @Module({
-  providers: [TestResolver],
+  imports: [UsecasesProxyModule.register()],
+  providers: [ProductResolver],
 })
 export class ResolversModule {}

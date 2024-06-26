@@ -1,1 +1,5 @@
 export * from './repository.type'
+export * from './product.repository'
+export * from './distributor.repository'
+export * from './order.repository'
+export * from './slot.repository'

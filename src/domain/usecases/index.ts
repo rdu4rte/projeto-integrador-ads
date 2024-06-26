@@ -1,1 +1,1 @@
-export * from './usecases.contract'
+export * from './usecases.interface'

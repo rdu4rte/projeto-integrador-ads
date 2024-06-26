@@ -31,9 +31,13 @@
     "@nestjs/graphql": "^12.0.11",
     "@nestjs/microservices": "^10.3.0",
     "@nestjs/platform-express": "^10.3.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "dotenv": "^16.3.1",
     "graphql": "^16.8.1",
+    "graphql-type-json": "^0.3.2",
     "luxon": "^3.4.4",
+    "module-alias": "^2.2.3",
     "mongodb": "4.16.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -48,6 +52,7 @@
     "@types/express": "^4.17.13",
     "@types/jest": "^29.5.11",
     "@types/luxon": "^3.3.7",
+    "@types/module-alias": "^2.0.4",
     "@types/node": "^16.0.0",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^6.16.0",
@@ -68,5 +73,9 @@
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.10.1",
     "typescript": "^4.3.5"
+  },
+  "_moduleAliases": {
+    "@modules": "build/modules",
+    "@core": "build/core"
   }
 }

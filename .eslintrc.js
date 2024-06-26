@@ -19,6 +19,7 @@ module.exports = {
     'max-len': 'off',
     'no-unused-vars': 'off',
 		'unused-imports/no-unused-imports': 'error',
+    '@typescript-eslint/no-namespace': 'off',
     '@typescript-eslint/semi': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',

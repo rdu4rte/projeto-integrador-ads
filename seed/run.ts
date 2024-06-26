@@ -1,3 +1,4 @@
+import 'module-alias/register'
 import { Db } from 'mongodb'
 
 import { MongoDbConnector } from '../src/infra/db/connectors'

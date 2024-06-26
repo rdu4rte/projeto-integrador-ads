@@ -1,4 +1,4 @@
-import { Field, Float, ObjectType, registerEnumType } from '@nestjs/graphql'
+import { Field, Float, Int, ObjectType, registerEnumType } from '@nestjs/graphql'
 import { ObjectId } from 'mongodb'
 
 import { ObjectIdScalar } from '@/main/graphql/scalars'
@@ -53,4 +53,13 @@ export class Product {
 
   @Field(() => Boolean)
   active: boolean
+}
+
+@ObjectType()
+export class ProductsDataResponse {
+  @Field(() => [Product])
+  data: Product[]
+
+  @Field(() => Int)
+  count: number
 }
