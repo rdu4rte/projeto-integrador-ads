@@ -85,10 +85,12 @@ type DistributorsDataResponse {
 }
 
 type Mutation {
+  deleteOrder(input: String!): DefaultResponse!
   deleteProduct(input: String!): DefaultResponse!
+  deleteSlot(input: String!): DefaultResponse!
   insertDistributor(input: DistributorInput!): Distributor!
   insertProduct(input: ProductInput!): Product!
-  updatetProduct(input: DistributorUpdateParamsInput!): DistributorResultUnion!
+  updateProduct(input: DistributorUpdateParamsInput!): DistributorResultUnion!
 }
 
 """Mongo Object Id scalar type"""

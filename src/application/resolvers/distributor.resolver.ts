@@ -75,7 +75,7 @@ export class DistributorResolver {
 
   @Directive('@dbConnection')
   @Mutation(() => DistributorResultUnion)
-  async updatetProduct(
+  async updateProduct(
     @Args('input') input: DistributorUpdateParamsInput,
     @Context() { dbConn }: HttpContext
   ): Promise<typeof DistributorResultUnion> {

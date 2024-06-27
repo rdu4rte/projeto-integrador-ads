@@ -75,7 +75,7 @@ export class ProductResolver {
 
   @Directive('@dbConnection')
   @Mutation(() => ProductResultUnion)
-  async updatetProduct(
+  async updateProduct(
     @Args('input') input: ProductUpdateParamsInput,
     @Context() { dbConn }: HttpContext
   ): Promise<typeof ProductResultUnion> {
