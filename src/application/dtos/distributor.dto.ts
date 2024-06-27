@@ -1,7 +1,17 @@
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql'
+import {
+  createUnionType,
+  Field,
+  InputType,
+  Int,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql'
+import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator'
 import { ObjectId } from 'mongodb'
 
 import { ObjectIdScalar } from '@/main/graphql/scalars'
+
+import { DefaultResponse } from './default.dto'
 
 export enum DistributorSegment {
   wholesale = 'wholesale',
@@ -32,14 +42,14 @@ registerEnumType(DistributorSegment, {
 
 @ObjectType()
 export class DistributorContact {
-  @Field(() => String)
-  email: string
+  @Field(() => String, { nullable: true })
+  email?: string
 
-  @Field(() => String)
-  phone: string
+  @Field(() => String, { nullable: true })
+  phone?: string
 
-  @Field(() => String)
-  address: string
+  @Field(() => String, { nullable: true })
+  address?: string
 }
 
 @ObjectType()
@@ -58,14 +68,97 @@ export class Distributor {
   segment: DistributorSegment
 
   @Field(() => Date)
-  createAt: Date
+  createdAt: Date
 
   @Field(() => Date)
-  updateAt: Date
+  updatedAt: Date
 
   @Field(() => Boolean)
   active: boolean
 
   @Field(() => DistributorContact)
   contact: DistributorContact
+}
+
+@ObjectType()
+export class DistributorsDataResponse {
+  @Field(() => [Distributor])
+  data: Distributor[]
+
+  @Field(() => Int)
+  count: number
+}
+
+@InputType()
+export class DistributorContactInput {
+  @Field(() => String, { nullable: true })
+  @IsString()
+  @IsOptional()
+  email: string
+
+  @Field(() => String, { nullable: true })
+  @IsString()
+  @IsOptional()
+  phone: string
+
+  @Field(() => String, { nullable: true })
+  @IsString()
+  @IsOptional()
+  address: string
+}
+
+@InputType()
+export class DistributorInput {
+  @Field(() => String)
+  @IsString()
+  name: string
+
+  @Field(() => DistributorSegment)
+  @IsEnum(DistributorSegment)
+  segment: DistributorSegment
+
+  @Field(() => DistributorContactInput)
+  contact: DistributorContactInput
+}
+
+export const DistributorResultUnion = createUnionType({
+  name: 'DistributorResultUnion',
+  types: () => [Distributor, DefaultResponse] as const,
+  resolveType: (value: any) => {
+    if (value._id) return Distributor
+    if (value.details) return DefaultResponse
+    return null
+  },
+})
+
+@InputType()
+export class DistributorUpdateInput {
+  @Field(() => String, { nullable: true })
+  @IsString()
+  @IsOptional()
+  name?: string
+
+  @Field(() => DistributorSegment, { nullable: true })
+  @IsEnum(DistributorSegment)
+  @IsOptional()
+  segment?: DistributorSegment
+
+  @Field(() => Boolean, { nullable: true })
+  @IsBoolean()
+  @IsOptional()
+  active?: boolean
+
+  @Field(() => DistributorContactInput, { nullable: true })
+  @IsOptional()
+  contact?: DistributorContactInput
+}
+
+@InputType()
+export class DistributorUpdateParamsInput {
+  @Field(() => String)
+  @IsString()
+  id: string
+
+  @Field(() => DistributorUpdateInput)
+  update: DistributorUpdateInput
 }

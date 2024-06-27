@@ -14,16 +14,81 @@ type DefaultResponse {
   success: Boolean!
 }
 
+type Distributor {
+  _id: ObjectId!
+  active: Boolean!
+  contact: DistributorContact!
+  createdAt: DateTime!
+  name: String!
+  segment: DistributorSegment!
+  updatedAt: DateTime!
+}
+
 type DistributorContact {
-  address: String!
-  email: String!
-  phone: String!
+  address: String
+  email: String
+  phone: String
+}
+
+input DistributorContactInput {
+  address: String
+  email: String
+  phone: String
+}
+
+input DistributorInput {
+  contact: DistributorContactInput!
+  name: String!
+  segment: DistributorSegment!
+}
+
+union DistributorResultUnion = DefaultResponse | Distributor
+
+"""Distributor segment type definition"""
+enum DistributorSegment {
+  automotivePartsAndSupplies
+  beautyAndCosmeticsStores
+  booksAndMediaStoresooksAndMediaStores
+  directMarketplace
+  dropshipping
+  electronicsAndApplianceStores
+  fashionAndApparelStores
+  franchise
+  furnitureAndHomeDecor
+  hardwareAndBuildingMaterials
+  importExport
+  onlineMarketplace
+  petSuppliesStores
+  pharmaciesAndHealthStores
+  retail
+  specialtyStores
+  sportsAndOutdoorStores
+  supermarketsAndGroceryStores
+  wholesale
+}
+
+input DistributorUpdateInput {
+  active: Boolean
+  contact: DistributorContactInput
+  name: String
+  segment: DistributorSegment
+}
+
+input DistributorUpdateParamsInput {
+  id: String!
+  update: DistributorUpdateInput!
+}
+
+type DistributorsDataResponse {
+  count: Int!
+  data: [Distributor!]!
 }
 
 type Mutation {
   deleteProduct(input: String!): DefaultResponse!
+  insertDistributor(input: DistributorInput!): Distributor!
   insertProduct(input: ProductInput!): Product!
-  updatetProduct(input: ProductUpdateParamsInput!): ProductResultUnion!
+  updatetProduct(input: DistributorUpdateParamsInput!): DistributorResultUnion!
 }
 
 """Mongo Object Id scalar type"""
@@ -64,19 +129,6 @@ type ProductSlot {
   unitValue: Float!
 }
 
-input ProductUpdateInput {
-  active: Boolean
-  category: ProductsCategory
-  description: String
-  name: String
-  unitValue: Float
-}
-
-input ProductUpdateParamsInput {
-  id: String!
-  update: ProductUpdateInput!
-}
-
 """Products category type definition"""
 enum ProductsCategory {
   apparel
@@ -100,6 +152,8 @@ type ProductsDataResponse {
 }
 
 type Query {
+  distributor(input: String!): DistributorResultUnion!
+  distributors(input: PaginationParams!): DistributorsDataResponse!
   product(input: String!): ProductResultUnion!
   products(input: PaginationParams!): ProductsDataResponse!
 }

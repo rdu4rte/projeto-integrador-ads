@@ -2,6 +2,13 @@ import { DynamicModule, Module } from '@nestjs/common'
 
 import { QueryBuilder } from '@/application/helpers'
 import {
+  DeleteDistributorUseCase,
+  GetDistributorsUseCase,
+  GetDistributorUseCase,
+  InsertDistributorUseCase,
+  UpdateDistributorUseCase,
+} from '@/application/usecases/distributor'
+import {
   DeleteProductUseCase,
   GetProductsUseCase,
   GetProductUseCase,
@@ -35,6 +42,12 @@ export class UsecasesProxyModule {
   static INSERT_PRODUCT_USECASE = 'InsertProductUseCase'
   static DELETE_PRODUCT_USECASE = 'DeleteProductUseCase'
   static UPDATE_PRODUCT_USECASE = 'UpdateProductUseCase'
+
+  static GET_DISTRIBUTORS_USECASE = 'GetDistributorsUseCase'
+  static GET_DISTRIBUTOR_USECASE = 'GetDistributorUseCase'
+  static INSERT_DISTRIBUTOR_USECASE = 'InsertDistributorUseCase'
+  static DELETE_DISTRIBUTOR_USECASE = 'DeleteDistributorUseCase'
+  static UPDATE_DISTRIBUTOR_USECASE = 'UpdateDistributorUseCase'
 
   static register(): DynamicModule {
     return {
@@ -82,6 +95,66 @@ export class UsecasesProxyModule {
               new UpdateProductUseCase.UseCase(logger, productsRepository)
             ),
         },
+        {
+          inject: [LoggerService, QueryBuilder, DistributorRepository],
+          provide: UsecasesProxyModule.GET_DISTRIBUTORS_USECASE,
+          useFactory: (
+            logger: LoggerService,
+            queryBuilder: QueryBuilder,
+            distributorRepository: DistributorRepository
+          ) =>
+            new UseCaseProxy(
+              new GetDistributorsUseCase.UseCase(
+                logger,
+                queryBuilder,
+                distributorRepository
+              )
+            ),
+        },
+        {
+          inject: [LoggerService, DistributorRepository],
+          provide: UsecasesProxyModule.GET_DISTRIBUTOR_USECASE,
+          useFactory: (
+            logger: LoggerService,
+            distributorRepository: DistributorRepository
+          ) =>
+            new UseCaseProxy(
+              new GetDistributorUseCase.UseCase(logger, distributorRepository)
+            ),
+        },
+        {
+          inject: [LoggerService, DistributorRepository],
+          provide: UsecasesProxyModule.INSERT_DISTRIBUTOR_USECASE,
+          useFactory: (
+            logger: LoggerService,
+            distributorRepository: DistributorRepository
+          ) =>
+            new UseCaseProxy(
+              new InsertDistributorUseCase.UseCase(logger, distributorRepository)
+            ),
+        },
+        {
+          inject: [LoggerService, DistributorRepository],
+          provide: UsecasesProxyModule.DELETE_DISTRIBUTOR_USECASE,
+          useFactory: (
+            logger: LoggerService,
+            distributorRepository: DistributorRepository
+          ) =>
+            new UseCaseProxy(
+              new DeleteDistributorUseCase.UseCase(logger, distributorRepository)
+            ),
+        },
+        {
+          inject: [LoggerService, DistributorRepository],
+          provide: UsecasesProxyModule.UPDATE_DISTRIBUTOR_USECASE,
+          useFactory: (
+            logger: LoggerService,
+            distributorRepository: DistributorRepository
+          ) =>
+            new UseCaseProxy(
+              new UpdateDistributorUseCase.UseCase(logger, distributorRepository)
+            ),
+        },
       ],
       exports: [
         UsecasesProxyModule.GET_PRODUCTS_USECASE,
@@ -89,6 +162,11 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.INSERT_PRODUCT_USECASE,
         UsecasesProxyModule.DELETE_PRODUCT_USECASE,
         UsecasesProxyModule.UPDATE_PRODUCT_USECASE,
+        UsecasesProxyModule.GET_DISTRIBUTORS_USECASE,
+        UsecasesProxyModule.GET_DISTRIBUTOR_USECASE,
+        UsecasesProxyModule.INSERT_DISTRIBUTOR_USECASE,
+        UsecasesProxyModule.DELETE_DISTRIBUTOR_USECASE,
+        UsecasesProxyModule.UPDATE_DISTRIBUTOR_USECASE,
       ],
     }
   }

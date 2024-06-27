@@ -7,8 +7,8 @@ export const distributors: Distributor[] = [
     _id: new ObjectId('6678bdbc376cf44260cb3cb4'),
     name: 'Distributor1',
     segment: DistributorSegment.beautyAndCosmeticsStores,
-    createAt: new Date(),
-    updateAt: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
     active: true,
     contact: {
       email: 'distributor1@mail.com',
@@ -20,8 +20,8 @@ export const distributors: Distributor[] = [
     _id: new ObjectId('6678be1691ab7dc8fc6bb9af'),
     name: 'Distributor2',
     segment: DistributorSegment.electronicsAndApplianceStores,
-    createAt: new Date(),
-    updateAt: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
     active: true,
     contact: {
       email: 'distributor2@mail.com',
