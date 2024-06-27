@@ -9,10 +9,21 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type DefaultResponse {
+  details: String!
+  success: Boolean!
+}
+
 type DistributorContact {
   address: String!
   email: String!
   phone: String!
+}
+
+type Mutation {
+  deleteProduct(input: String!): DefaultResponse!
+  insertProduct(input: ProductInput!): Product!
+  updatetProduct(input: ProductUpdateParamsInput!): ProductResultUnion!
 }
 
 """Mongo Object Id scalar type"""
@@ -37,11 +48,33 @@ type Product {
   updatedAt: DateTime!
 }
 
+input ProductInput {
+  category: ProductsCategory!
+  description: String!
+  name: String!
+  unitValue: Float!
+}
+
+union ProductResultUnion = DefaultResponse | Product
+
 type ProductSlot {
   _id: ObjectId!
   name: String!
   quantity: Int
   unitValue: Float!
+}
+
+input ProductUpdateInput {
+  active: Boolean
+  category: ProductsCategory
+  description: String
+  name: String
+  unitValue: Float
+}
+
+input ProductUpdateParamsInput {
+  id: String!
+  update: ProductUpdateInput!
 }
 
 """Products category type definition"""
@@ -67,6 +100,7 @@ type ProductsDataResponse {
 }
 
 type Query {
+  product(input: String!): ProductResultUnion!
   products(input: PaginationParams!): ProductsDataResponse!
 }
 

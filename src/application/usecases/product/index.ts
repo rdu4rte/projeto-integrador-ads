@@ -1,1 +1,5 @@
 export * from './get-products.usecase'
+export * from './insert-product.usecase'
+export * from './get-product.usecase'
+export * from './delete-product.usecase'
+export * from './update-product.usecase'

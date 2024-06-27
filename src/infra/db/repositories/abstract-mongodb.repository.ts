@@ -117,4 +117,17 @@ export class MongoDbRepository implements IMongoDbRepository {
   async aggregate(pipeline: Document[], mongoDbConn: Db): Promise<Document[]> {
     return mongoDbConn.collection(this.collection).aggregate(pipeline).toArray()
   }
+
+  /**
+   * @param {string} id
+   * @param {Db} mongoDbConn
+   * @returns {number}
+   */
+  async deleteOne(id: string, mongoDbConn: Db): Promise<number> {
+    const deleteResult = await mongoDbConn
+      .collection(this.collection)
+      .deleteOne({ _id: new ObjectId(id) })
+
+    return deleteResult.deletedCount
+  }
 }
