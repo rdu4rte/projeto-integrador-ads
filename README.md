@@ -38,3 +38,9 @@ $ task stop
 # watch logs
 $ task logs:app
 ```
+
+## Apollo GraphQL Playground
+
+```
+http://127.0.0.1:4000/graphql
+```
