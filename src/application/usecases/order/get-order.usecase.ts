@@ -1,4 +1,5 @@
-import { Db } from 'mongodb'
+import { InternalServerErrorException } from '@nestjs/common'
+import { Db, ObjectId } from 'mongodb'
 
 import { DefaultResponse, Order } from '@/application/dtos'
 import { OrderRepository } from '@/domain/repositories'
@@ -18,9 +19,26 @@ export namespace GetOrderUseCase {
       private readonly logger: LoggerService,
       private readonly orderRepository: OrderRepository
     ) {}
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     async perform({ input, dbConn }: Input): Promise<Order | DefaultResponse> {
-      return {} as any
+      const isObjectIdValid = ObjectId.isValid(input)
+
+      if (!isObjectIdValid) throw new InternalServerErrorException('Invalid object-id')
+
+      this.logger.log(GetOrderUseCase.UseCase.name, `Getting order by id "${input}"`)
+
+      const order = await this.orderRepository.getOne(
+        { _id: new ObjectId(input) },
+        dbConn
+      )
+
+      if (!order)
+        return {
+          details: `Order not found by id "${input}"`,
+          success: false,
+        }
+
+      return order as Order
     }
   }
 }

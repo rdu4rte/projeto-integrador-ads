@@ -7,7 +7,15 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+API para projeto de integração de ADS
+
+Solução: Manutenção de estoques de materiais
+
+## Requirements
+
+- Nodejs ^18.1.0
+- Docker
+- Task (https://taskfile.dev/)
 
 ## Installation
 
@@ -18,25 +26,15 @@ $ yarn install
 ## Running the app
 
 ```bash
-# development
-$ npm run start
+# set containers and run server
+$ task run
 
-# watch mode
-$ npm run start:dev
+# restart application
+$ task restart
 
-# production mode
-$ npm run start:prod
-```
+# stop and kill containers
+$ task stop
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# watch logs
+$ task logs:app
 ```

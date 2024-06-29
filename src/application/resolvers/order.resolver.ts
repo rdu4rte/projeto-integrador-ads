@@ -1,11 +1,19 @@
 import { Inject } from '@nestjs/common'
-import { Args, Context, Directive, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, Context, Directive, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 import { HttpContext } from '@/domain/http'
 import { UseCaseProxy } from '@/domain/usecases-proxy'
 import { UsecasesProxyModule } from '@/main/modules/usecases-proxy.module'
 
-import { DefaultResponse, Order } from '../dtos'
+import {
+  DefaultResponse,
+  Order,
+  OrderInput,
+  OrderResultUnion,
+  OrdersDataResponse,
+  OrderUpdateParamsInput,
+  PaginationParams,
+} from '../dtos'
 import {
   DeleteOrderUseCase,
   GetOrdersUseCase,
@@ -29,32 +37,32 @@ export class OrderResolver {
     private readonly updateOrderProxy: UseCaseProxy<UpdateOrderUseCase.UseCase>
   ) {}
 
-  // @Directive('@dbConnection')
-  // @Query(() => OrdersDataResponse)
-  // async orders(
-  //   @Args('input') input: PaginationParams,
-  //   @Context() { dbConn }: HttpContext
-  // ): Promise<OrdersDataResponse> {
-  //   return this.getOrdersProxy.getInstance().perform({ input, dbConn })
-  // }
+  @Directive('@dbConnection')
+  @Query(() => OrdersDataResponse)
+  async orders(
+    @Args('input') input: PaginationParams,
+    @Context() { dbConn }: HttpContext
+  ): Promise<OrdersDataResponse> {
+    return this.getOrdersProxy.getInstance().perform({ input, dbConn })
+  }
 
-  // @Directive('@dbConnection')
-  // @Query(() => OrderResultUnion)
-  // async order(
-  //   @Args('input') input: string,
-  //   @Context() { dbConn }: HttpContext
-  // ): Promise<typeof OrderResultUnion> {
-  //   return this.getOrderProxy.getInstance().perform({ input, dbConn })
-  // }
+  @Directive('@dbConnection')
+  @Query(() => OrderResultUnion)
+  async order(
+    @Args('input') input: string,
+    @Context() { dbConn }: HttpContext
+  ): Promise<typeof OrderResultUnion> {
+    return this.getOrderProxy.getInstance().perform({ input, dbConn })
+  }
 
-  // @Directive('@dbConnection')
-  // @Mutation(() => Order)
-  // async insertOrder(
-  //   @Args('input') input: OrderInput,
-  //   @Context() { dbConn }: HttpContext
-  // ): Promise<Product> {
-  //   return this.insertOrderProxy.getInstance().perform({ input, dbConn })
-  // }
+  @Directive('@dbConnection')
+  @Mutation(() => Order)
+  async insertOrder(
+    @Args('input') input: OrderInput,
+    @Context() { dbConn }: HttpContext
+  ): Promise<Order> {
+    return this.insertOrderProxy.getInstance().perform({ input, dbConn })
+  }
 
   @Directive('@dbConnection')
   @Mutation(() => DefaultResponse)
@@ -65,12 +73,12 @@ export class OrderResolver {
     return this.deleteOrderProxy.getInstance().perform({ input, dbConn })
   }
 
-  // @Directive('@dbConnection')
-  // @Mutation(() => OrderResultUnion)
-  // async updateOrder(
-  //   @Args('input') input: OrderUpdateParamsInput,
-  //   @Context() { dbConn }: HttpContext
-  // ): Promise<typeof OrderResultUnion> {
-  //   return this.updateOrderProxy.getInstance().perform({ input, dbConn })
-  // }
+  @Directive('@dbConnection')
+  @Mutation(() => OrderResultUnion)
+  async updateOrder(
+    @Args('input') input: OrderUpdateParamsInput,
+    @Context() { dbConn }: HttpContext
+  ): Promise<typeof OrderResultUnion> {
+    return this.updateOrderProxy.getInstance().perform({ input, dbConn })
+  }
 }

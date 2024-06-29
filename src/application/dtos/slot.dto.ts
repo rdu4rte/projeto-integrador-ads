@@ -39,9 +39,6 @@ export class ProductSlot {
 
   @Field(() => Float)
   unitValue: number
-
-  @Field(() => Int, { nullable: true })
-  quantity?: number
 }
 
 @ObjectType()

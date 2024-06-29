@@ -89,14 +89,65 @@ type Mutation {
   deleteProduct(input: String!): DefaultResponse!
   deleteSlot(input: String!): DefaultResponse!
   insertDistributor(input: DistributorInput!): Distributor!
+  insertOrder(input: OrderInput!): Order!
   insertProduct(input: ProductInput!): Product!
   insertSlot(input: SlotInput!): Slot!
+  updateOrder(input: OrderUpdateParamsInput!): OrderResultUnion!
   updateProduct(input: DistributorUpdateParamsInput!): DistributorResultUnion!
   updateSlot(input: SlotUpdateParamsInput!): SlotResultUnion!
 }
 
 """Mongo Object Id scalar type"""
 scalar ObjectId
+
+type Order {
+  _id: ObjectId!
+  createdAt: DateTime!
+  products: [OrderProductSlot!]!
+  status: OrderStatus!
+  updatedAt: DateTime!
+}
+
+input OrderInput {
+  products: [OrderProductSlotInput!]!
+}
+
+type OrderProductSlot {
+  category: ProductsCategory!
+  name: String!
+  quantity: Int!
+}
+
+input OrderProductSlotInput {
+  category: ProductsCategory!
+  name: String!
+  quantity: Int!
+}
+
+union OrderResultUnion = DefaultResponse | Order
+
+"""Order status type definition"""
+enum OrderStatus {
+  delivered
+  progress
+  separation
+  transportation
+}
+
+input OrderUpdateInput {
+  products: [OrderProductSlotInput!]
+  status: OrderStatus
+}
+
+input OrderUpdateParamsInput {
+  id: String!
+  update: OrderUpdateInput!
+}
+
+type OrdersDataResponse {
+  count: Int!
+  data: [Order!]!
+}
 
 input PaginationParams {
   page: Int
@@ -129,7 +180,6 @@ union ProductResultUnion = DefaultResponse | Product
 type ProductSlot {
   _id: ObjectId!
   name: String!
-  quantity: Int
   unitValue: Float!
 }
 
@@ -158,6 +208,8 @@ type ProductsDataResponse {
 type Query {
   distributor(input: String!): DistributorResultUnion!
   distributors(input: PaginationParams!): DistributorsDataResponse!
+  order(input: String!): OrderResultUnion!
+  orders(input: PaginationParams!): OrdersDataResponse!
   product(input: String!): ProductResultUnion!
   products(input: PaginationParams!): ProductsDataResponse!
   slot(input: String!): SlotResultUnion!
