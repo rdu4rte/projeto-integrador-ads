@@ -23,9 +23,11 @@ import {
   UpdateProductUseCase,
 } from '@/application/usecases/product'
 import {
+  DeleteSlotUseCase,
   GetSlotsUseCase,
   GetSlotUseCase,
   InsertSlotUseCase,
+  UpdateSlotUseCase,
 } from '@/application/usecases/slot'
 import {
   DistributorRepository,
@@ -198,26 +200,28 @@ export class UsecasesProxyModule {
             new UseCaseProxy(new GetSlotUseCase.UseCase(logger, slotRepository)),
         },
         {
-          inject: [LoggerService, SlotRepository],
+          inject: [LoggerService, SlotRepository, ProductRepository],
           provide: UsecasesProxyModule.INSERT_SLOT_USECASE,
-          useFactory: (logger: LoggerService, slotRepository: SlotRepository) =>
-            new UseCaseProxy(new InsertSlotUseCase.UseCase(logger, slotRepository)),
+          useFactory: (
+            logger: LoggerService,
+            slotRepository: SlotRepository,
+            productRepository: ProductRepository
+          ) =>
+            new UseCaseProxy(
+              new InsertSlotUseCase.UseCase(logger, slotRepository, productRepository)
+            ),
         },
         {
           inject: [LoggerService, SlotRepository],
           provide: UsecasesProxyModule.DELETE_SLOT_USECASE,
           useFactory: (logger: LoggerService, slotRepository: SlotRepository) =>
-            new UseCaseProxy(
-              new DeleteDistributorUseCase.UseCase(logger, slotRepository)
-            ),
+            new UseCaseProxy(new DeleteSlotUseCase.UseCase(logger, slotRepository)),
         },
         {
           inject: [LoggerService, SlotRepository],
           provide: UsecasesProxyModule.UPDATE_SLOT_USECASE,
           useFactory: (logger: LoggerService, slotRepository: SlotRepository) =>
-            new UseCaseProxy(
-              new UpdateDistributorUseCase.UseCase(logger, slotRepository)
-            ),
+            new UseCaseProxy(new UpdateSlotUseCase.UseCase(logger, slotRepository)),
         },
         {
           inject: [LoggerService, QueryBuilder, OrderRepository],

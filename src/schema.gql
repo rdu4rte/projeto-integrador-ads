@@ -90,7 +90,9 @@ type Mutation {
   deleteSlot(input: String!): DefaultResponse!
   insertDistributor(input: DistributorInput!): Distributor!
   insertProduct(input: ProductInput!): Product!
+  insertSlot(input: SlotInput!): Slot!
   updateProduct(input: DistributorUpdateParamsInput!): DistributorResultUnion!
+  updateSlot(input: SlotUpdateParamsInput!): SlotResultUnion!
 }
 
 """Mongo Object Id scalar type"""
@@ -158,6 +160,56 @@ type Query {
   distributors(input: PaginationParams!): DistributorsDataResponse!
   product(input: String!): ProductResultUnion!
   products(input: PaginationParams!): ProductsDataResponse!
+  slot(input: String!): SlotResultUnion!
+  slots(input: PaginationParams!): SlotsDataResponse!
+}
+
+type Slot {
+  _id: ObjectId!
+  active: Boolean!
+  createdAt: DateTime!
+  product: ProductSlot!
+  quantity: Int!
+  section: Int!
+  segment: SlotSegment!
+  updatedAt: DateTime!
+}
+
+input SlotInput {
+  product: ObjectId!
+  quantity: Int!
+  section: Int!
+  segment: SlotSegment!
+}
+
+union SlotResultUnion = DefaultResponse | Slot
+
+"""Slot segment type definition"""
+enum SlotSegment {
+  apparelAndPersonalCare
+  educationAndOffice
+  eletronicsAndEntertainment
+  healthAndWellness
+  homeAndOutdoor
+  petSupplies
+  toysAndBabyProducts
+}
+
+input SlotUpdateInput {
+  active: Boolean
+  quantity: Int
+  section: Int
+  segment: SlotSegment
+}
+
+input SlotUpdateParamsInput {
+  id: String!
+  update: SlotUpdateInput!
+}
+
+type SlotsDataResponse {
+  count: Int!
+  data: [Slot!]!
 }
 
 """Sort direction type definition"""

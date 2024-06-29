@@ -1,6 +1,11 @@
-import { Db } from 'mongodb'
+import { Db, ObjectId } from 'mongodb'
 
-import { PaginationParams } from '@/application/dtos'
+import {
+  PaginationParams,
+  QueryParams,
+  Slot,
+  SlotsDataResponse,
+} from '@/application/dtos'
 import { QueryBuilder } from '@/application/helpers'
 import { SlotRepository } from '@/domain/repositories'
 import { DefaultUseCase } from '@/domain/usecases'
@@ -12,7 +17,7 @@ export namespace GetSlotsUseCase {
     dbConn: Db
   }
 
-  type Output = any // SlotsDataResponse
+  type Output = SlotsDataResponse
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
@@ -20,9 +25,31 @@ export namespace GetSlotsUseCase {
       private readonly queryBuilder: QueryBuilder,
       private readonly slotRepository: SlotRepository
     ) {}
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async perform({ input, dbConn }: Input): Promise<any> {
-      return {} as any
+
+    async perform({ input, dbConn }: Input): Promise<SlotsDataResponse> {
+      const { search } = input
+      const query: any = {}
+
+      const queryParams: QueryParams = this.queryBuilder.buildQueryParams(input)
+
+      if (search) {
+        if (ObjectId.isValid(search)) query._id = new ObjectId(search)
+        else {
+          query.$or = [
+            { segment: { $regex: `.*${search}`, $options: 'i' } },
+            { section: { $regex: `.*${search}`, $options: 'i' } },
+          ]
+        }
+      }
+
+      this.logger.log(GetSlotsUseCase.UseCase.name, 'Getting slots')
+
+      const [data, count] = await Promise.all([
+        (await this.slotRepository.getAll(queryParams, query, dbConn)) as Slot[],
+        await this.slotRepository.countDocuments(query, dbConn),
+      ])
+
+      return { data, count }
     }
   }
 }

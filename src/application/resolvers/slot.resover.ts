@@ -1,11 +1,19 @@
 import { Inject } from '@nestjs/common'
-import { Args, Context, Directive, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, Context, Directive, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 import { HttpContext } from '@/domain/http'
 import { UseCaseProxy } from '@/domain/usecases-proxy'
 import { UsecasesProxyModule } from '@/main/modules/usecases-proxy.module'
 
-import { DefaultResponse, Slot } from '../dtos'
+import {
+  DefaultResponse,
+  PaginationParams,
+  Slot,
+  SlotInput,
+  SlotResultUnion,
+  SlotsDataResponse,
+  SlotUpdateParamsInput,
+} from '../dtos'
 import {
   DeleteSlotUseCase,
   GetSlotsUseCase,
@@ -29,32 +37,32 @@ export class SlotResolver {
     private readonly updateSlotProxy: UseCaseProxy<UpdateSlotUseCase.UseCase>
   ) {}
 
-  // @Directive('@dbConnection')
-  // @Query(() => SlotsDataResponse)
-  // async slots(
-  //   @Args('input') input: PaginationParams,
-  //   @Context() { dbConn }: HttpContext
-  // ): Promise<SlotsDataResponse> {
-  //   return this.getSlotsProxy.getInstance().perform({ input, dbConn })
-  // }
+  @Directive('@dbConnection')
+  @Query(() => SlotsDataResponse)
+  async slots(
+    @Args('input') input: PaginationParams,
+    @Context() { dbConn }: HttpContext
+  ): Promise<SlotsDataResponse> {
+    return this.getSlotsProxy.getInstance().perform({ input, dbConn })
+  }
 
-  // @Directive('@dbConnection')
-  // @Query(() => SlotResultUnion)
-  // async slot(
-  //   @Args('input') input: string,
-  //   @Context() { dbConn }: HttpContext
-  // ): Promise<typeof SlotResultUnion> {
-  //   return this.getSlotProxy.getInstance().perform({ input, dbConn })
-  // }
+  @Directive('@dbConnection')
+  @Query(() => SlotResultUnion)
+  async slot(
+    @Args('input') input: string,
+    @Context() { dbConn }: HttpContext
+  ): Promise<typeof SlotResultUnion> {
+    return this.getSlotProxy.getInstance().perform({ input, dbConn })
+  }
 
-  // @Directive('@dbConnection')
-  // @Mutation(() => Slot)
-  // async insertSlot(
-  //   @Args('input') input: SlotInput,
-  //   @Context() { dbConn }: HttpContext
-  // ): Promise<Product> {
-  //   return this.insertSlotProxy.getInstance().perform({ input, dbConn })
-  // }
+  @Directive('@dbConnection')
+  @Mutation(() => Slot)
+  async insertSlot(
+    @Args('input') input: SlotInput,
+    @Context() { dbConn }: HttpContext
+  ): Promise<Slot> {
+    return this.insertSlotProxy.getInstance().perform({ input, dbConn })
+  }
 
   @Directive('@dbConnection')
   @Mutation(() => DefaultResponse)
@@ -65,12 +73,12 @@ export class SlotResolver {
     return this.deleteSlotProxy.getInstance().perform({ input, dbConn })
   }
 
-  // @Directive('@dbConnection')
-  // @Mutation(() => SlotResultUnion)
-  // async updateSlot(
-  //   @Args('input') input: SlotUpdateParamsInput,
-  //   @Context() { dbConn }: HttpContext
-  // ): Promise<typeof SlotResultUnion> {
-  //   return this.updateSlotProxy.getInstance().perform({ input, dbConn })
-  // }
+  @Directive('@dbConnection')
+  @Mutation(() => SlotResultUnion)
+  async updateSlot(
+    @Args('input') input: SlotUpdateParamsInput,
+    @Context() { dbConn }: HttpContext
+  ): Promise<typeof SlotResultUnion> {
+    return this.updateSlotProxy.getInstance().perform({ input, dbConn })
+  }
 }

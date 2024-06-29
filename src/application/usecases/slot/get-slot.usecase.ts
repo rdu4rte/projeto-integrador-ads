@@ -1,4 +1,5 @@
-import { Db } from 'mongodb'
+import { InternalServerErrorException } from '@nestjs/common'
+import { Db, ObjectId } from 'mongodb'
 
 import { DefaultResponse, Slot } from '@/application/dtos'
 import { SlotRepository } from '@/domain/repositories'
@@ -18,9 +19,23 @@ export namespace GetSlotUseCase {
       private readonly logger: LoggerService,
       private readonly slotRepository: SlotRepository
     ) {}
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     async perform({ input, dbConn }: Input): Promise<Slot | DefaultResponse> {
-      return {} as any
+      const isObjectIdValid = ObjectId.isValid(input)
+
+      if (!isObjectIdValid) throw new InternalServerErrorException('Invalid object-id')
+
+      this.logger.log(GetSlotUseCase.UseCase.name, `Getting slot by id "${input}"`)
+
+      const slot = await this.slotRepository.getOne({ _id: new ObjectId(input) }, dbConn)
+
+      if (!slot)
+        return {
+          details: `Slot not found by id "${input}"`,
+          success: false,
+        }
+
+      return slot as Slot
     }
   }
 }
